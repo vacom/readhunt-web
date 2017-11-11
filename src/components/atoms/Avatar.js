@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 
 const Avatar = (props) => (
-   <img className={`rounded img-fluid ${props.className}`} src={props.src} alt="avatar"/>
+   <img className={`rounded img-fluid ${props.className}`} src={props.src} alt=""/>
 );
 
 Avatar.defaultProps = {

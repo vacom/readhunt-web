@@ -4,7 +4,7 @@ import styled from "styled-components";
 //Components
 import { Link, Icon } from "../atoms/index";
 
-const Item = props => {
+const Item = (props) => {
   return (
     <Link className={props.className} {...props}>
       <Icon name={props.iconName} color={props.iconColor}/>
@@ -14,7 +14,7 @@ const Item = props => {
 };
 
 Item.defaultProps = {
-  text: "category"
+  text: "Item"
 };
 
 const itemWithStyles = styled(Item)`

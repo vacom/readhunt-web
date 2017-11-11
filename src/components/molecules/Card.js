@@ -24,7 +24,7 @@ Card.defaultProps = {
 };
 
 const cardWithStyles = styled(Card)`
-    width: 20rem;
+   width: auto;
 `;
 
 export default cardWithStyles;

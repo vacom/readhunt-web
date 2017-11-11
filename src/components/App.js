@@ -6,7 +6,7 @@ import Router from "./Router";
 
 class App extends PureComponent {
   componentDidMount(){
-    console.log(this.getData().then(data => console.log(data)));
+    //console.log(this.getData().then(data => console.log(data)));
   }
   getData = async () => {
       const res = await fetch('http://127.0.0.1:8000/api/v1/articles');

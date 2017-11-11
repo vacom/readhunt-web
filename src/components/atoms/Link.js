@@ -3,10 +3,10 @@ import React from "react";
 import styled from "styled-components";
 import Colors from "../../utils/Colors";
 
-const Link = (props) => {
+const Link = ({className, children, href}) => {
   return(
-  <a className={props.className} {...props}>
-    {props.children}
+  <a className={className} href={href}>
+    {children}
   </a>
   )
 };
