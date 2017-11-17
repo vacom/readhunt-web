@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import Colors from "../../utils/Colors";
 //Components
-import { Avatar } from "../atoms/index";
+//import { Avatar } from "../atoms/index";
 
 const CommentInput = props => {
   return (

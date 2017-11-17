@@ -7,7 +7,7 @@ import styled from "styled-components";
 import Colors from "../../utils/Colors";
 class Navbar extends PureComponent {
   _goToSearch = e => {
-    if (e.key == "Enter") {
+    if (e.key === "Enter") {
       this.props.history.push("/search");
     }
   };

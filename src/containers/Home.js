@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 //Components
 import { Link } from "../components/atoms/index";
-import { List, Item, Card, Section, Post } from "../components/molecules/index";
+import { List, Item, Card, Section, } from "../components/molecules/index";
+import Articles from "./Articles";
 //Utils
 import { random } from "../utils/Utils";
 
@@ -14,9 +15,11 @@ const ColorRange = [
   "#F4D94D"
 ];
 class Home extends Component {
-  _goToDetails = () =>{
-      this.props.history.push("/post/1");
-      console.log("hey");
+  componentDidMount() {
+    //getArticles().then(x => console.log(x));
+  }
+  _goToDetails = () => {
+    this.props.history.push("/post/1");
   };
   render() {
     return (
@@ -64,23 +67,10 @@ class Home extends Component {
         </div>
         <div className="col-md-6">
           <Section title="Hoje">
-            <Post
-              onClick={this._goToDetails}
-              title="Zero To One"
-              text="Peter Thiel's new book on Startups"
-              imageSrc="https://goo.gl/jXHWTb"
-              votes={12}
-              comments={2}
-            />
-            <Post
-              title="101 Ways to Live Well"
-              text="Wellness hacks for travel, work and beyond"
-              imageSrc="https://goo.gl/QC12xH"
-              votes={60}
-              comments={30}
-            />
+            <Articles />
           </Section>
-          <Section title="Ontem">
+
+          {/* <Section title="Ontem">
             <Post
               title="Atlas Obscura"
               text="Explorer's guide to the world's hidden wonders"
@@ -89,6 +79,7 @@ class Home extends Component {
               comments={221}
             />
           </Section>
+         */}
         </div>
         <div className="col-md-3">
           <h6>Sugestões</h6>

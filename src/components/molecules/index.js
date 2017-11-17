@@ -4,6 +4,7 @@ import Item from "./Item";
 import Card from "./Card";
 import Section from "./Section";
 import Post from "./Post";
+import Placeholder from "./Placeholder";
 
 export {
   List,
@@ -11,4 +12,5 @@ export {
   Card,
   Section,
   Post,
+  Placeholder,
 };
