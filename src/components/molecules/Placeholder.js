@@ -3,18 +3,26 @@ import React from "react";
 import styled from "styled-components";
 import Colors from "../../utils/Colors";
 //Components
-import {Icon} from '../atoms/index';
+import { Icon } from "../atoms/index";
 
 const Placeholder = props => {
   return (
-    <div className={`${props.className}`}>
-        
+    <div className={`card ${props.className}`}>
+      <div className="card-body">
+        <Icon name={props.iconName} size={props.iconSize} />
+        <h6>{props.msg}</h6>
+      </div>
     </div>
   );
 };
 
+Placeholder.defaultProps = {
+  iconName: "fa-exclamation-triangle",
+  msg: "Some error message",
+};
+
 const placeholderWithStyles = styled(Placeholder)`
-  
+  width: 30rem;
 `;
 
 export default placeholderWithStyles;

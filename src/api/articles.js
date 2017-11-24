@@ -11,6 +11,14 @@ import {apiUrl} from '../utils/Constants';
     return data;
  }
 
+  //Get article information by id
+  const getArticle = async (id) => {
+    const res = await fetch(`${apiUrl}/article/${id}`);
+    const data = await res.json();
+    return data;
+ }
+
  export {
      getArticles,
+     getArticle,
  }
