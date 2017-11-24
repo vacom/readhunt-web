@@ -1,57 +1,97 @@
 import React, { Component } from "react";
-//Components
-import { Post } from "../components/molecules/index";
+import { withRouter } from "react-router-dom"; //Components
+import { Post, Placeholder } from "../components/molecules/index";
 import Spinner from "react-md-spinner";
 //API
 import { getArticles } from "../api/articles";
-
+import { getCategory } from "../api/categories";
 class Articles extends Component {
   state = {
     loading: true,
     error: false,
-    data: []
+    articles: [],
+    category: [],
+    pageCount: 0,
+    showArticles: 3,
+    msg: ""
   };
   componentDidMount() {
-    setTimeout(() => {
-      this.setState({ loading: false });
-    }, 6000);
-
-    getArticles().then(res => {
-      console.log(res);
-      if (res.error) {
-        this.setState({ error: true });
-        return;
-      }
-      this.setState({ data: res.data, loading: false });
-    });
+    this._getArticles();
   }
-  render() {
-    const { loading, error, data } = this.state;
+  _getArticles = async () => {
+    const res = await getArticles();
+    const { error, data: articles, msg } = res;
     if (error) {
-      return <div>Error</div>;
+      this.setState({ error: true, loading: false, msg });
+      return;
     }
-    if(Object.keys(data).length <= 0){
-        return <div>Esta vazio</div>
+    const pageCount = Object.keys(articles).length - 4;
+    this.setState({ articles, loading: false, msg, pageCount });
+  };
+  _getCategorybyId = async id => {
+    const res = await getCategory(id);
+    const { error, data: category, msg } = res;
+    if (error) {
+      this.setState({ msg });
+      return;
     }
+    return category.content || "Sem Categoria";
+  };
+  _showMoreArticles = () => {
+    this.setState({
+      showArticles: Object.keys(this.state.articles).length,
+      pageCount: 0
+    });
+  };
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="text-center">
+          <Placeholder msg={this.state.msg} iconSize={32} />
+        </div>
+      );
+    }
+    const { articles, pageCount, showArticles } = this.state;
     return (
       <div>
-        {loading ? (
+        {this.state.loading ? (
           <div className="text-center">
             <Spinner size={30} />
           </div>
         ) : (
-          <Post
-            onClick={this._goToDetails}
-            title="Zero To One"
-            text="Peter Thiel's new book on Startups"
-            imageSrc="https://goo.gl/jXHWTb"
-            votes={12}
-            comments={2}
-          />
+          articles.map((data, index) => {
+            if (index <= showArticles) {
+              return (
+                <Post
+                  key={index}
+                  onClick={() => this.props.history.push(`/post/${data.id}`)}
+                  title={data.title || "Sem titulo"}
+                  text={data.tagline || "Sem tagline"}
+                  imageSrc={
+                    data.thumbnail_url || "http://via.placeholder.com/150x150"
+                  }
+                  category={"teste"}
+                />
+              );
+            }
+            return true;
+          })
+        )}
+        {pageCount <= 0 ? (
+          ""
+        ) : (
+          <button
+            onClick={this._showMoreArticles}
+            type="button"
+            style={{ marginTop: 10, cursor: "pointer" }}
+            className="btn btn-light  btn-block"
+          >
+            {`Ver mais ${pageCount}`}
+          </button>
         )}
       </div>
     );
   }
 }
 
-export default Articles;
+export default withRouter(Articles);

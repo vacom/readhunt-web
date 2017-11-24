@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 //Components
-import { Image, Icon, Center } from "../components/atoms/index";
+import { Image, Icon } from "../components/atoms/index";
 import { Section, Post, Placeholder } from "../components/molecules/index";
 import { CommentInput } from "../components/organisms/index";
 import Comment from "../components/molecules/Post";
@@ -29,7 +29,6 @@ class Details extends Component {
   }
   _getArticle = async id => {
     const res = await getArticle(id);
-    console.log("artigo = ", res);
     const { error, data: article, msg } = res;
     if (error) {
       this.setState({ error: true, loading: false, msg });
@@ -50,7 +49,6 @@ class Details extends Component {
   _getVotes = async articleId => {
     const res = await getVotesCountbyArticle(articleId);
     const { error, data, msg } = res;
-    console.log("votes = ", res);
     if (error) {
       this.setState({ error: true, msg });
       return;
@@ -101,7 +99,6 @@ class Details extends Component {
     if (this.state.error) {
       return (
         <div className="text-center">
-          {" "}
           <Placeholder msg={this.state.msg} iconSize={32} />
         </div>
       );
@@ -115,19 +112,29 @@ class Details extends Component {
               onDetails
               title={article.title || "Sem titulo"}
               text={article.tagline || "Sem tagline"}
-              imageSrc={article.thumbnail_url || "http://via.placeholder.com/150x150"}
-              category={category.content || "Sem categoria"}
+              imageSrc={
+                article.thumbnail_url || "http://via.placeholder.com/150x150"
+              }
+              category={
+                `${category.content} - ${moment(article.created_at).format(
+                  "ll"
+                )}` || "Sem categoria"
+              }
             />
           </div>
         </div>
         <div className="row">
           <div className="col-md-8 col-sm-12 order-sm-12 order-md-1">
             <Section noTitle>
-              <Image src={article.cover_url || "http://via.placeholder.com/350x350"} />
+              <Image
+                src={article.cover_url || "http://via.placeholder.com/350x350"}
+              />
             </Section>
             <h6 style={{ marginTop: 25 }}>Descrição</h6>
             <Section noTitle>
-              <p>{article.description || "Sem descrição, edite para adiconar"}</p>
+              <p>
+                {article.description || "Sem descrição, edite para adiconar"}
+              </p>
             </Section>
             <h6 style={{ marginTop: 25 }}>Comentários</h6>
             <Section noTitle>

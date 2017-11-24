@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import Colors from "../../utils/Colors";
 //Components
-import Icon from "../atoms/Icon";
+//import Icon from "../atoms/Icon";
 
 const Post = (props) => {
   return (
@@ -35,7 +35,7 @@ const Post = (props) => {
             </div>
             {props.onDetails ? (
               ""
-            ) : (
+            ) : (""/*
               <div className="rd-tools text-right">
                 <button type="button" className="btn btn-sm btn-outline-dark">
                   <Icon
@@ -54,7 +54,7 @@ const Post = (props) => {
                   {props.comments}
                 </button>
               </div>
-            )}
+            */)}
           </div>
         </div>
       </div>

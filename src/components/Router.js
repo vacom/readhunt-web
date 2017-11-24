@@ -14,10 +14,10 @@ const Main = props => (
     <Switch>
       <PrivateRoute exact path="/" component={Home} />
       <Route path="/post/:id" component={Details} />
-      <Route path="/search" component={Search} />
+      <Route exact path="/search*" component={Search}/>
       <PrivateRoute exact path="/new" component={New} />
       <PrivateRoute exact path="/edit/:id" component={New} />
-      <PrivateRoute exact path="/profile" component={Profile}/>
+      <PrivateRoute exact path="/profile" component={Profile} />
       <Route component={NoMatch} />
     </Switch>
   </main>

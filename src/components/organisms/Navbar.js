@@ -1,24 +1,34 @@
 import React, { PureComponent } from "react";
 import { withRouter } from "react-router-dom";
 //Components
-import { Avatar, Link } from "../atoms/index";
+import { Avatar, Link, Icon } from "../atoms/index";
 //Styles
 import styled from "styled-components";
 import Colors from "../../utils/Colors";
+//utils
+import {_refreshPage} from "../../utils/Utils";
 class Navbar extends PureComponent {
+  state = {
+    searchQuery: ""
+  };
   _goToSearch = e => {
     if (e.key === "Enter") {
-      this.props.history.push("/search");
+      const query = this.state.searchQuery;
+      this.props.history.push(`/search?q=${query}`);
+      setTimeout(() => {
+        _refreshPage();
+      }, 10)
     }
   };
   render() {
     return (
       <nav
-        className={`navbar navbar-expand-md fixed-top bg-light justify-content-between ${this
-          .props.className}`}
+        className={`navbar navbar-expand-md fixed-top bg-light justify-content-between ${
+          this.props.className
+        }`}
       >
         <div className="container">
-          <a className="navbar-brand" href="/">
+          <a className="navbar-brand" href="#/">
             Readhunt
           </a>
           <button
@@ -38,6 +48,9 @@ class Navbar extends PureComponent {
                 <form className="form-inline">
                   <input
                     onKeyPress={this._goToSearch}
+                    onChange={e =>
+                      this.setState({ searchQuery: e.target.value })
+                    }
                     className="form-control mr-md-6 rd-search"
                     type="search"
                     placeholder="Pesquisar"
@@ -47,6 +60,16 @@ class Navbar extends PureComponent {
               </li>
             </ul>
             <ul className="navbar-nav">
+              <li className="nav-item">
+                <Link className="nav-link" href="#/">
+                  <button
+                    className="btn btn-sm align-middle btn-outline-secondary rd-add"
+                    type="button"
+                  >
+                    <Icon name="fa-home" size={18} />
+                  </button>
+                </Link>
+              </li>
               <li className="nav-item">
                 <Link className="nav-link" href="#/new">
                   <button

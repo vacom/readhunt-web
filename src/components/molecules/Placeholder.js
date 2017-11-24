@@ -1,7 +1,6 @@
 import React from "react";
 //Styles
 import styled from "styled-components";
-import Colors from "../../utils/Colors";
 //Components
 import { Icon } from "../atoms/index";
 
@@ -22,7 +21,8 @@ Placeholder.defaultProps = {
 };
 
 const placeholderWithStyles = styled(Placeholder)`
-  width: 30rem;
+  width: auto;
+  ${props => props.noborder ? "border: 0" : ""}
 `;
 
 export default placeholderWithStyles;
