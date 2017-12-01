@@ -11,6 +11,7 @@ import { getVotesCountbyArticle } from "../api/votes";
 import { getCategory } from "../api/categories";
 import { getCommentsbyArticle } from "../api/comments";
 //Utils
+import { _getUserId, _isLoggedIn } from "../utils/Utils";
 import * as moment from "moment";
 class Details extends Component {
   state = {
@@ -165,6 +166,7 @@ class Details extends Component {
           <div className="col-md-4 col-sm-12  order-sm-1  order-md-12">
             <Section noTitle>
               <button
+                style={{ cursor: "pointer" }}
                 type="button"
                 className="btn btn-primary btn-lg btn-block"
               >
@@ -177,7 +179,7 @@ class Details extends Component {
               </button>
               <hr />
               <a
-                type="button"
+                role="button"
                 className="btn btn-light btn-lg btn-block"
                 href={article.link}
                 target="_blank"
@@ -185,6 +187,37 @@ class Details extends Component {
                 <Icon name="fa-link" /> Website
               </a>
             </Section>
+            {_isLoggedIn() ? (
+              _getUserId() === article.user_id ? (
+                <Section noTitle>
+                  <a
+                    role="button"
+                    className="btn btn-light btn-lg btn-block"
+                    href={article.link}
+                    target="_blank"
+                  >
+                    <Icon name="fa-pencil" /> Editar
+                  </a>
+                  <hr />
+                  <button
+                    style={{ cursor: "pointer" }}
+                    type="button"
+                    className="btn btn-danger btn-lg btn-block"
+                  >
+                    <Icon name="fa-trash-o" color="#FFF" /> Eliminar
+                  </button>
+                </Section>
+              ) : (
+                ""
+              )
+            ) : (
+              <div className="alert alert-light" role="alert">
+                É teu este artigo?{" "}
+                <a href="#/signin" className="alert-link">
+                  Iniciar sessão
+                </a>. para editar.
+              </div>
+            )}
           </div>
         </div>
       </div>

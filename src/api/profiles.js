@@ -6,7 +6,7 @@ import { apiUrl } from "../utils/Constants";
 
 //get the user profile by id
 const getProfilebyId = async userId => {
-  const res = await fetch(`${apiUrl}/profile/${userId}`);
+  const res = await fetch(`${apiUrl}/profile/all/${userId}`);
   const data = await res.json();
   return data;
 };

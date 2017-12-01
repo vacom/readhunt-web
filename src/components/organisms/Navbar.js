@@ -6,7 +6,7 @@ import { Avatar, Link, Icon } from "../atoms/index";
 import styled from "styled-components";
 import Colors from "../../utils/Colors";
 //utils
-import {_refreshPage} from "../../utils/Utils";
+import { _refreshPage, _isLoggedIn } from "../../utils/Utils";
 class Navbar extends PureComponent {
   state = {
     searchQuery: ""
@@ -17,7 +17,7 @@ class Navbar extends PureComponent {
       this.props.history.push(`/search?q=${query}`);
       setTimeout(() => {
         _refreshPage();
-      }, 10)
+      }, 10);
     }
   };
   render() {
@@ -70,21 +70,35 @@ class Navbar extends PureComponent {
                   </button>
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link className="nav-link" href="#/new">
-                  <button
-                    className="btn btn-sm align-middle btn-outline-secondary rd-add"
-                    type="button"
+              {_isLoggedIn() ? (
+                [
+                  <li className="nav-item" key="addbook">
+                    <Link className="nav-link" href="#/new">
+                      <button
+                        className="btn btn-sm align-middle btn-outline-secondary rd-add"
+                        type="button"
+                      >
+                        Adicionar livro
+                      </button>
+                    </Link>
+                  </li>,
+                  <li className="nav-item" key="profileAvatar">
+                    <Link className="nav-link" href="#/profile/1">
+                      <Avatar src="https://goo.gl/qd6RoG" size={30} />
+                    </Link>
+                  </li>
+                ]
+              ) : (
+                <li className="nav-item">
+                  <Link
+                    className="nav-link"
+                    href="#/signin"
+                    style={{ marginTop: "4px" }}
                   >
-                    Adicionar livro
-                  </button>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" href="#/profile">
-                  <Avatar src="https://goo.gl/qd6RoG" size={30} />
-                </Link>
-              </li>
+                    Iniciar Sessão?
+                  </Link>
+                </li>
+              )}
             </ul>
           </div>
         </div>

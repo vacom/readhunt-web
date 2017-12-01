@@ -1,21 +1,21 @@
 import React from "react";
-//Styles
-import styled from "styled-components";
+//Components
+import { Section, Placeholder } from "../molecules/index";
 
-const NoMatch = (props) => {
+const NoMatch = () => {
   return (
-    <div>Page not found</div>
+        <Section noTitle>
+          <div className="text-center">
+            <Placeholder
+              msg="404 - Page not found!"
+              iconSize={32}
+              iconName="fa-file-o"
+              noborder
+            />
+          </div>
+        </Section>
   );
 };
 
-NoMatch.defaultProps = {
-  text: "category"
-};
 
-const noMatchWithStyles = styled(NoMatch)`
-  span {
-    margin-left: 10px;
-  }
-`;
-
-export default noMatchWithStyles;
+export default NoMatch;

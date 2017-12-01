@@ -2,6 +2,8 @@ import React, { PureComponent } from "react";
 import { Link, withRouter } from "react-router-dom";
 //Components
 import AuthWrapper from "../components/organisms/AuthWrapper";
+//Utils
+import { oAuthRedirectUrl } from "../utils/Constants";
 class LoginUser extends PureComponent {
   _signIn = () => {
     this.props.history.push("/");
@@ -9,7 +11,7 @@ class LoginUser extends PureComponent {
   render() {
     return (
       <AuthWrapper title="Iniciar sessão">
-        <label forhtml="inputEmail" className="sr-only">
+        {/*<label forhtml="inputEmail" className="sr-only">
           Email
         </label>
         <input
@@ -29,16 +31,17 @@ class LoginUser extends PureComponent {
           className="form-control"
           placeholder="Password"
           required
-        />
-        <Link to="/signup">Criar uma conta? Registar.</Link>
-        <button
-          onClick={this._signIn}
-          style={{ marginTop: 10, cursor: "pointer"}}
+    />*/}
+        <a
+          href={oAuthRedirectUrl}
+          style={{ marginTop: 10, cursor: "pointer" }}
           className="btn btn-lg btn-primary btn-block"
-          type="button"
+          role="button"
         >
-          Entrar
-        </button>
+          Entrar com Laravel
+        </a>
+        <br/>
+        <Link to="/signup">Criar uma conta? Registar.</Link>
       </AuthWrapper>
     );
   }

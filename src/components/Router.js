@@ -9,15 +9,15 @@ import Profile from "../containers/Profile";
 import Search from "../containers/Search";
 import NoMatch from "../components/molecules/NoMatch";
 
-const Main = props => (
+const Main = () => (
   <main>
     <Switch>
-      <PrivateRoute exact path="/" component={Home} />
+      <Route exact path="/" component={Home} />
       <Route path="/post/:id" component={Details} />
-      <Route exact path="/search*" component={Search}/>
+      <Route exact path="/search*" component={Search} />
       <PrivateRoute exact path="/new" component={New} />
       <PrivateRoute exact path="/edit/:id" component={New} />
-      <PrivateRoute exact path="/profile" component={Profile} />
+      <Route exact path="/profile/:id" component={Profile} />
       <Route component={NoMatch} />
     </Switch>
   </main>
