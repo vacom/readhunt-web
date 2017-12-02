@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import AuthWrapper from "../components/organisms/AuthWrapper";
 //API
 import { createNewUser } from "../api/user";
+import { createProfileByUserId } from "../api/profiles";
 
 class CreateUser extends PureComponent {
   state = {
@@ -16,6 +17,25 @@ class CreateUser extends PureComponent {
   _signUpUser = async () => {
     const { name, email, password } = this.state;
     const res = await createNewUser(name, email, password);
+    const { error, data, msg } = res;
+    if (error) {
+      this.setState({ error: true, msg: `${msg} - ${JSON.stringify(data)}` });
+      return;
+    }
+    this._createUserProfile(data.id);
+  };
+  _createUserProfile = async user_id => {
+    const about = "Sobre mim",
+      country = "País",
+      avatar_url = "http://via.placeholder.com/50x50",
+      cover_url = "http://via.placeholder.com/150x150";
+    const res = await createProfileByUserId(
+      about,
+      country,
+      avatar_url,
+      cover_url,
+      user_id
+    );
     const { error, data, msg } = res;
     if (error) {
       this.setState({ error: true, msg: `${msg} - ${JSON.stringify(data)}` });

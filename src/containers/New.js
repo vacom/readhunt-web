@@ -28,10 +28,8 @@ class New extends Component {
     modeEdit: false
   };
   componentDidMount() {
-    console.log(this.props);
     this._getCategories();
     const isEdit = this.props.match.path.split("/");
-    console.log(isEdit);
     if (isEdit[1] === "edit") {
       this.setState({ modeEdit: true });
       const articleId = this.props.match.params.id;
@@ -65,12 +63,10 @@ class New extends Component {
   _getArticle = async id => {
     const res = await getArticle(id);
     const { error, data: article, msg } = res;
-    console.log(article.title);
     if (error) {
       this.setState({ error: true, loading: false, msg });
       return;
     }
-    console.log(article);
     const {
       title,
       tagline,
@@ -107,10 +103,8 @@ class New extends Component {
     //Shows feedback and updates the DB
     this.props.showMessage("success", msg, undefined, "fa-check");
     this.props.history.push("/");
-    console.log(res);
   };
   _updateArticle = async () => {
-    console.log("article_id = ", this.state.article_id);
     const res = await updateArticle(this.state);
     const { error, data, msg } = res;
     if (error) {

@@ -12,9 +12,17 @@ import Comment from "../components/molecules/Post";
 import Spinner from "react-md-spinner";
 //API
 import { getArticle, deleteArticlebyId } from "../api/articles";
-import { getVotesCountbyArticle, voteArticlebyId } from "../api/votes";
+import {
+  getVotesCountbyArticle,
+  voteArticlebyId,
+  deleteAllVotesByArticleId
+} from "../api/votes";
 import { getCategory } from "../api/categories";
-import { getCommentsbyArticle } from "../api/comments";
+import {
+  getCommentsbyArticle,
+  deleteAllCommentsByArticleId
+} from "../api/comments";
+import { getProfilebyId } from "../api/profiles";
 //Utils
 import { _getUserId, _isLoggedIn } from "../utils/Utils";
 import * as moment from "moment";
@@ -29,21 +37,25 @@ class Details extends Component {
     category: "",
     comments: [],
     commentsLoading: true,
+    avatar_url: "",
+    user_name: "",
     msg: "",
     onConfirmation: false
   };
   componentDidMount() {
-    console.log(this.props);
     const id = this.props.match.params.id;
     this._getArticle(id);
   }
   _getArticle = async id => {
     const res = await getArticle(id);
     const { error, data: article, msg } = res;
+    console.log(res);
     if (error) {
       this.setState({ error: true, loading: false, msg });
       return;
     }
+    //Author information
+    this._getUserProfile(article.user_id);
     //get votes
     this._getVotes(article.id);
     //get Category
@@ -72,7 +84,7 @@ class Details extends Component {
   _storeVote = async () => {
     const { article } = this.state;
     const res = await voteArticlebyId(true, _getUserId(), article.id);
-    const { error, data, msg } = res;
+    const { error, msg } = res;
     if (error) {
       this.props.showMessage(
         "error",
@@ -116,6 +128,21 @@ class Details extends Component {
       msg
     });
   };
+  _getUserProfile = async id => {
+    const res = await getProfilebyId(id);
+    const { error, data: user, msg } = res;
+    if (error) {
+      this.setState({ loading: false, msg });
+      return;
+    }
+    this.setState({
+      avatar_url: user[0].avatar_url,
+      user_name: user[0].name,
+      msg,
+      loading: false,
+      error: false
+    });
+  };
   _deleteArticle = async () => {
     const res = await deleteArticlebyId(this.state.article.id);
     const { error, data, msg } = res;
@@ -126,6 +153,24 @@ class Details extends Component {
     //Shows feedback and updates the DB
     this.props.showMessage("success", msg, undefined, "fa-check");
     this.props.history.push("/");
+  };
+  _deleteComments = async () => {
+    const res = await deleteAllCommentsByArticleId(this.state.article.id);
+    const { error, msg } = res;
+    if (error) {
+      this.setState({ error: true, msg: `${msg}` });
+      return;
+    }
+    this._deleteArticle();
+  };
+  _deleteVotes = async () => {
+    const res = await deleteAllVotesByArticleId(this.state.article.id);
+    const { error, msg } = res;
+    if (error) {
+      this.setState({ error: true, msg: `${msg}` });
+      return;
+    }
+    this._deleteComments();
   };
   _showConfirmation = () => {
     this.setState(prevState => ({
@@ -147,15 +192,23 @@ class Details extends Component {
         </div>
       );
     }
-    const { article, votes, category, comments, onConfirmation } = this.state;
+    const {
+      article,
+      votes,
+      category,
+      comments,
+      onConfirmation,
+      avatar_url,
+      user_name
+    } = this.state;
     return (
       <div>
         <Confirmation
           title="Tem certeza?"
-          description="Este livro será removido, não pode recuperar depois."
+          description="Este livro será removido e todos os seus comentarios, não pode recuperar depois."
           show={onConfirmation}
           onCancel={this._showConfirmation}
-          onConfirmation={this._deleteArticle}
+          onConfirmation={this._deleteVotes}
           onConfirmationText="Confirmar"
           onConfirmationColor={Colors.green}
         />
@@ -163,6 +216,7 @@ class Details extends Component {
           <div className="col-md-12 col-sm-12">
             <Post
               onDetails
+              auto
               title={article.title || "Sem titulo"}
               text={article.tagline || "Sem tagline"}
               imageSrc={
@@ -217,7 +271,7 @@ class Details extends Component {
                       text={data.content}
                       imageSrc={data.avatar_url}
                       imageSize={50}
-                      category={moment(data.created_at).format("ll")}
+                      category={moment(data.created_at).fromNow()}
                     />
                   );
                 })
@@ -225,6 +279,34 @@ class Details extends Component {
             </Section>
           </div>
           <div className="col-md-4 col-sm-12  order-sm-1  order-md-12">
+            <Section noTitle>
+              <button
+                style={{ cursor: "pointer" }}
+                type="button"
+                onClick={() =>
+                  this.props.history.push(`/profile/${article.user_id}`)
+                }
+                className="btn btn-light btn-lg btn-block"
+              >
+                <img
+                  style={{ width: 45 }}
+                  src={avatar_url || "http://via.placeholder.com/50x50"}
+                  className="rounded float-left rd-thumbnail"
+                  alt="thumb"
+                />{" "}
+                <span
+                  style={{
+                    position: "relative",
+                    top: 7,
+                    right: 12,
+                    fontSize: 20
+                  }}
+                >
+                  {" "}
+                  {user_name || "Sem nome"}
+                </span>
+              </button>
+            </Section>
             <Section noTitle>
               <button
                 style={{ cursor: "pointer" }}

@@ -17,12 +17,12 @@ const Placeholder = props => {
 
 Placeholder.defaultProps = {
   iconName: "fa-exclamation-triangle",
-  msg: "Some error message",
+  msg: "Some error message"
 };
 
 const placeholderWithStyles = styled(Placeholder)`
   width: auto;
-  ${props => props.noborder ? "border: 0" : ""}
+  ${props => (props.noborder ? "border: 0" : "")};
 `;
 
 export default placeholderWithStyles;

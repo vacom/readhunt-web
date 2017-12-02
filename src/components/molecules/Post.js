@@ -75,6 +75,7 @@ Post.defaultProps = {
 
 const postWithStyles = styled(Post)`
   .card {
+    overflow: hidden;
     border-top: 0;
     border-right: 0;
     border-left: 0;
@@ -107,6 +108,7 @@ const postWithStyles = styled(Post)`
   .card-text {
     color: ${Colors.link.normal};
     margin: 0;
+    ${props => (props.auto ? "width: auto;" : "width: 325px;")};
   }
   .rd-tools button {
     margin-left: 5px;

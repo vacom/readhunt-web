@@ -18,6 +18,7 @@ class Articles extends Component {
   componentDidMount() {
     const { categoryId } = this.props;
     this._getArticles(categoryId);
+    this._getCategorybyId(1);
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.categoryId !== this.props.categoryId) {
@@ -46,7 +47,7 @@ class Articles extends Component {
       this.setState({ msg });
       return;
     }
-    return category.content || "Sem Categoria";
+    return category.content || "Sem categoria";
   };
   _showMoreArticles = () => {
     this.setState({
@@ -81,7 +82,7 @@ class Articles extends Component {
                   imageSrc={
                     data.thumbnail_url || "http://via.placeholder.com/150x150"
                   }
-                  category={"teste"}
+                  category={data.category || "Sem categoria"}
                 />
               );
             }

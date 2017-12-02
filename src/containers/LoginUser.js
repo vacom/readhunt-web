@@ -40,7 +40,7 @@ class LoginUser extends PureComponent {
         >
           Entrar com Laravel
         </a>
-        <br/>
+        <br />
         <Link to="/signup">Criar uma conta? Registar.</Link>
       </AuthWrapper>
     );

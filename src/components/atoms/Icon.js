@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import Colors from "../../utils/Colors";
 
-const Icon = (props) => (
+const Icon = props => (
   <i className={`fa ${props.name} ${props.className}`} style={props.style}>
     &zwnj;
   </i>
@@ -16,8 +16,8 @@ Icon.defaultProps = {
 };
 
 const IconWithStyles = styled(Icon)`
-  font-size: ${(props) => props.size || 20}px;
-  color: ${(props) => props.color || Colors.text.normal};
+  font-size: ${props => props.size || 20}px;
+  color: ${props => props.color || Colors.text.normal};
 `;
 
 export default IconWithStyles;

@@ -45,4 +45,31 @@ const updateProfileByUserId = async ({
   return data;
 };
 
-export { getProfilebyId, updateProfileByUserId };
+//Creates a new profile based on the user ID
+const createProfileByUserId = async (
+  about = "Sobre mim",
+  country = "País",
+  avatar_url = "http://via.placeholder.com/50x50",
+  cover_url = "http://via.placeholder.com/150x150",
+  user_id
+) => {
+  const options = {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${_token()}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      about,
+      country,
+      avatar_url,
+      cover_url,
+      user_id
+    })
+  };
+  const res = await fetch(`${apiUrl}/profile`, options);
+  const data = await res.json();
+  return data;
+};
+
+export { getProfilebyId, updateProfileByUserId, createProfileByUserId };

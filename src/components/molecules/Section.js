@@ -24,6 +24,8 @@ Section.defaultProps = {
   title: "Section Title"
 };
 
-const sectionWithStyles = styled(Section)`margin-bottom: 10px;`;
+const sectionWithStyles = styled(Section)`
+  margin-bottom: 10px;
+`;
 
 export default sectionWithStyles;

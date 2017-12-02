@@ -2,7 +2,7 @@ import React from "react";
 //Styles
 import styled from "styled-components";
 
-const AuthWrapper = (props) => {
+const AuthWrapper = props => {
   return (
     <div className={`container ${props.className}`}>
       <form className="form-signin">

@@ -49,10 +49,24 @@ const storeCommentByArticleId = async (content, user_id, article_id) => {
   return data;
 };
 
+//Creates a new comment to the article
+const deleteAllCommentsByArticleId = async article_id => {
+  const options = {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${_token()}`,
+      "Content-Type": "application/json"
+    }
+  };
+  const res = await fetch(`${apiUrl}/comment/all/${article_id}`, options);
+  const data = await res.json();
+  return data;
+};
 
 export {
   getCommentsbyArticle,
   getCommentbyId,
   getCommentsCountbyArticle,
-  storeCommentByArticleId
+  storeCommentByArticleId,
+  deleteAllCommentsByArticleId
 };

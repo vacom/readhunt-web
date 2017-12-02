@@ -7,7 +7,7 @@ import { _isLoggedIn } from "../utils/Utils";
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
-    render={(props) =>
+    render={props =>
       _isLoggedIn() ? (
         <Component {...props} {...rest} />
       ) : (
@@ -17,7 +17,8 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
             state: { from: props.location }
           }}
         />
-      )}
+      )
+    }
   />
 );
 

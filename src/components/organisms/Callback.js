@@ -23,7 +23,7 @@ class Callback extends PureComponent {
     console.log(res.access_token);
     localStorage.setItem("readhuntToken", res.access_token);
     setTimeout(() => {
-     // this.props.history.push("/");
+      // this.props.history.push("/");
     }, 1000);
   };
 

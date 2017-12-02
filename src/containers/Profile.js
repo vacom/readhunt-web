@@ -84,7 +84,10 @@ class Profile extends PureComponent {
             {_isLoggedIn() ? (
               Number(_getUserId()) === Number(profile.user_id) ? (
                 <div className="alert alert-light" role="alert">
-                  <a href={`#/profile/edit/${_getUserId()}`} className="alert-link">
+                  <a
+                    href={`#/profile/edit/${_getUserId()}`}
+                    className="alert-link"
+                  >
                     Editar informações
                   </a>{" "}
                   |{" "}
