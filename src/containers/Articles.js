@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom"; //Components
 import { Post, Placeholder } from "../components/molecules/index";
 import Spinner from "react-md-spinner";
 //API
-import { getArticles } from "../api/articles";
+import { getArticles, getArticlesByCategory } from "../api/articles";
 import { getCategory } from "../api/categories";
 class Articles extends Component {
   state = {
@@ -16,17 +16,28 @@ class Articles extends Component {
     msg: ""
   };
   componentDidMount() {
-    this._getArticles();
+    const { categoryId } = this.props;
+    this._getArticles(categoryId);
   }
-  _getArticles = async () => {
-    const res = await getArticles();
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.categoryId !== this.props.categoryId) {
+      this._getArticles(nextProps.categoryId);
+    }
+  }
+  _getArticles = async categoryId => {
+    let res = "";
+    if (categoryId === 0) {
+      res = await getArticles();
+    } else {
+      res = await getArticlesByCategory(categoryId);
+    }
     const { error, data: articles, msg } = res;
     if (error) {
       this.setState({ error: true, loading: false, msg });
       return;
     }
     const pageCount = Object.keys(articles).length - 4;
-    this.setState({ articles, loading: false, msg, pageCount });
+    this.setState({ articles, loading: false, msg, pageCount, error: false });
   };
   _getCategorybyId = async id => {
     const res = await getCategory(id);

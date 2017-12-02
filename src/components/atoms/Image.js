@@ -15,6 +15,7 @@ Image.defaultProps = {
 const imageWithStyles = styled(Image)`
   width: 100%;
   height: ${(props) => props.height || 400}px;
+  object-fit: cover;
 `;
 
 export default imageWithStyles;

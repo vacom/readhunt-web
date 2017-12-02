@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 //Components
-import { Image, Icon } from "../components/atoms/index";
+import { Image } from "../components/atoms/index";
 import { Section, Post, Placeholder } from "../components/molecules/index";
 import Spinner from "react-md-spinner";
 //API
@@ -25,11 +25,11 @@ class Profile extends PureComponent {
       this.setState({ error: true, loading: false, msg });
       return;
     }
-    console.log(res);
     this.setState({
       profile: data[0],
       msg,
-      loading: false
+      loading: false,
+      error: false
     });
   };
   render() {
@@ -75,7 +75,7 @@ class Profile extends PureComponent {
         <div className="row">
           <div className="col-md-12">
             {_isLoggedIn() ? (
-              _getUserId() === profile.user_id ? (
+              _getUserId() == profile.user_id ? (
                 <div className="alert alert-light" role="alert">
                   <a href="#/signin" className="alert-link">
                     Editar informações

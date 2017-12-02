@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 //Components
-import {Link} from "../components/atoms/index";
+import { Link } from "../components/atoms/index";
 import { List, Card, Placeholder } from "../components/molecules/index";
 import Spinner from "react-md-spinner";
 //API
@@ -23,7 +23,7 @@ class Suggestions extends Component {
       this.setState({ error: true, loading: false, msg });
       return;
     }
-    this.setState({ suggestions, loading: false, msg });
+    this.setState({ suggestions, loading: false, msg, error: false });
   };
   render() {
     if (this.state.loading) {

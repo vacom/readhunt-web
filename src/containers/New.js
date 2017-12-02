@@ -2,23 +2,126 @@ import React, { Component } from "react";
 //Components
 //import { Link } from "../components/atoms/index";
 import { Section, Post } from "../components/molecules/index";
+import Spinner from "react-md-spinner";
+//API
+import { getCategories } from "../api/categories";
+import { getArticle, createArticle } from "../api/articles";
 
 class New extends Component {
   state = {
     title: "",
     tagline: "",
     thumbnail_url: "",
-    category_id: 0,
+    category_id: 1,
+    loading: true,
+    error: false,
+    categories: [],
+    user_id: "",
+    msg: "",
     category_text: "categoria",
     link: "",
     description: "",
-    cover_url: ""
+    cover_url: "",
+    modeEdit: false
+  };
+  componentDidMount() {
+    this._getCategories();
+    const isEdit = this.props.match.path.split("/");
+    console.log(isEdit);
+    if (isEdit[1] === "edit") {
+      this.setState({ modeEdit: true });
+      const articleId = this.props.match.params.id;
+      this._getArticle(articleId);
+    }
+  }
+  _getCategories = async () => {
+    const res = await getCategories();
+    const { error, data: categories, msg } = res;
+    if (error) {
+      this.setState({ error: true, loading: false, msg });
+      return;
+    }
+    this.setState({ categories, loading: false, msg, error: false });
+  };
+  _changeCategory = e => {
+    var index = e.target.selectedIndex;
+    var optionElement = e.target.childNodes[index];
+    var category_id = optionElement.getAttribute("data-id");
+    this.setState({
+      category_text: e.target.value,
+      category_id
+    });
+  };
+  _getArticle = async id => {
+    const res = await getArticle(id);
+    const { error, data: article, msg } = res;
+    console.log(article.title);
+    if (error) {
+      this.setState({ error: true, loading: false, msg });
+      return;
+    }
+    const {
+      title,
+      tagline,
+      thumbnail_url,
+      link,
+      description,
+      cover_url,
+      user_id
+    } = article;
+    const category = this.state.categories[Number(article.category_id - 1)];
+    this.setState({
+      title,
+      tagline,
+      thumbnail_url,
+      link,
+      description,
+      cover_url,
+      user_id,
+      category_text: category.content,
+      category_id: category.id,
+      msg,
+      loading: false,
+      error: false
+    });
+  };
+  _storeArticle = () => {
+    createArticle();
+    /*const res = await createArticle();
+    const { error, data, msg } = res;
+    if (error) {
+      this.setState({ error: true, msg: `${msg} - ${JSON.stringify(data)}` });
+      return;
+    }
+
+    console.log(res);*/
   };
   render() {
+    if (this.state.loading) {
+      return (
+        <div className="text-center">
+          <Spinner size={30} />
+        </div>
+      );
+    }
+    const {
+      categories,
+      modeEdit,
+      title,
+      tagline,
+      description,
+      cover_url,
+      link,
+      thumbnail_url,
+      error,
+      msg
+    } = this.state;
     return (
       <div className="row">
         <div className="col-md-6">
-          <h5 style={{ marginBottom: 25 }}>Publique algo novo</h5>
+          <h5 style={{ marginBottom: 25 }}>
+            {modeEdit ? "Editar livro" : "Publique algo novo"}
+          </h5>
           <Section noTitle>
             <form>
               <div className="form-row">
@@ -26,6 +129,7 @@ class New extends Component {
                   <label forhtml="title">Titulo</label>
                   <input
                     onChange={e => this.setState({ title: e.target.value })}
+                    value={title}
                     type="text"
                     className="form-control"
                     id="title"
@@ -39,12 +143,19 @@ class New extends Component {
                   </div>
                   <select
                     className="custom-select"
-                    onChange={e =>
-                      this.setState({ category_text: e.target.value })}
+                    onChange={this._changeCategory}
                   >
-                    <option value="Informática">Informática</option>
-                    <option value="Travel">Travel</option>
-                    <option value="Arte">Arte</option>
+                    {categories.map(data => {
+                      return (
+                        <option
+                          key={data.id}
+                          data-id={data.id}
+                          value={data.content}
+                        >
+                          {data.content}
+                        </option>
+                      );
+                    })}
                   </select>
                 </div>
               </div>
@@ -52,6 +163,7 @@ class New extends Component {
                 <label forhtml="tagline">Resumo</label>
                 <input
                   onChange={e => this.setState({ tagline: e.target.value })}
+                  value={tagline}
                   type="text"
                   className="form-control"
                   id="tagline"
@@ -63,6 +175,8 @@ class New extends Component {
                 <label forhtml="description">Descrição</label>
                 <textarea
                   id="description"
+                  onChange={e => this.setState({ description: e.target.value })}
+                  value={description}
                   className="form-control"
                   placeholder="Descrição do livro"
                   rows="2"
@@ -73,6 +187,8 @@ class New extends Component {
                 <label forhtml="title">Website</label>
                 <input
                   type="text"
+                  onChange={e => this.setState({ link: e.target.value })}
+                  value={link}
                   className="form-control"
                   id="link"
                   placeholder="Endereço do livro"
@@ -83,8 +199,10 @@ class New extends Component {
                 <div className="form-group col-md-6">
                   <label forhtml="thumbnail_url">URL da miniatura</label>
                   <input
+                    value={thumbnail_url}
                     onChange={e =>
-                      this.setState({ thumbnail_url: e.target.value })}
+                      this.setState({ thumbnail_url: e.target.value })
+                    }
                     type="text"
                     className="form-control"
                     id="thumbnail_url"
@@ -95,18 +213,39 @@ class New extends Component {
                   <label forhtml="cover_url">URL de Capa</label>
                   <input
                     type="text"
+                    onChange={e => this.setState({ cover_url: e.target.value })}
+                    value={cover_url}
                     className="form-control"
                     id="cover_url"
                     placeholder="URL de Capa"
                   />
                 </div>
               </div>
-              <button
-                type="button"
-                className="btn btn-primary btn-lg btn-block"
-              >
-                Guardar livro
-              </button>
+              {error ? (
+                <div className="alert alert-danger" role="alert">
+                  {msg}
+                </div>
+              ) : (
+                ""
+              )}
+              {modeEdit ? (
+                <button
+                  style={{ cursor: "pointer" }}
+                  type="button"
+                  className="btn btn-warning btn-lg btn-block"
+                >
+                  Atualizar livro
+                </button>
+              ) : (
+                <button
+                  style={{ cursor: "pointer" }}
+                  type="button"
+                  className="btn btn-primary btn-lg btn-block"
+                  onClick={this._storeArticle}
+                >
+                  Guardar livro
+                </button>
+              )}
             </form>
           </Section>
         </div>

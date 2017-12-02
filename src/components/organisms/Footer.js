@@ -12,7 +12,7 @@ const Footer = props => {
           Criado por{" "}
           <Link href="http://www.formette.com" target="_blank">
             Vitor Amaral - 76182
-          </Link> | MCMM-MI | DTI
+          </Link> | MCMM-MI | TDI
         </span>
       </div>
     </footer>

@@ -14,7 +14,7 @@ class Search extends Component {
   componentDidMount() {
     //const query = this.props.match.params.query;
     const param = this.props.location.search;
-    const query = param.split("=")
+    const query = param.split("=");
     this._getSearchResults(query[1]);
   }
   _getSearchResults = async query => {
@@ -24,7 +24,7 @@ class Search extends Component {
       this.setState({ error: true, loading: false, msg });
       return;
     }
-    this.setState({ results, loading: false, msg });
+    this.setState({ results, loading: false, msg, error: false });
   };
   render() {
     if (this.state.error) {

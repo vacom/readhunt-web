@@ -5,6 +5,9 @@ module.exports = {
   _isLoggedIn() {
     return window.localStorage.getItem("readhuntToken");
   },
+  _token() {
+    return window.localStorage.getItem("readhuntToken");
+  },
   _logout() {
     window.localStorage.removeItem("readhuntToken");
     module.exports._deleteUserId();

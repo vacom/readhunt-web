@@ -3,9 +3,15 @@ import React from "react";
 import styled from "styled-components";
 import Colors from "../../utils/Colors";
 
-const Link = ({ className, children, href, style, target }) => {
+const Link = ({ className, children, href, style, target, onClick }) => {
   return (
-    <a className={className} href={href} style={style} target={target}>
+    <a
+      className={className}
+      href={href}
+      style={style}
+      target={target}
+      onClick={onClick}
+    >
       {children}
     </a>
   );

@@ -25,14 +25,15 @@ const IconRange = [
   "fa-history",
   "fa-laptop",
   "fa-graduation-cap",
-  "fa-university",
+  "fa-university"
 ];
 class Categories extends Component {
   state = {
     loading: true,
     error: false,
     categories: [],
-    msg: ""
+    msg: "",
+    selectCategory: 0
   };
   componentDidMount() {
     this._getCategories();
@@ -44,8 +45,12 @@ class Categories extends Component {
       this.setState({ error: true, loading: false, msg });
       return;
     }
-    this.setState({ categories, loading: false, msg });
+    this.setState({ categories, loading: false, msg, error: false });
   };
+  _selectCategory(id) {
+    this.setState({ selectCategory: id });
+    this.props.changeCategory(id);
+  }
   render() {
     if (this.state.loading) {
       return (
@@ -61,13 +66,17 @@ class Categories extends Component {
         </div>
       );
     }
+    const { selectCategory } = this.state;
     return (
       <List>
         <Item
           text="Home"
           iconName="fa-home"
           iconColor={ColorRange[random(0, 6)]}
-          className="list-group-item list-group-item-action active"
+          onClick={() => this._selectCategory(0)}
+          className={`list-group-item list-group-item-action ${
+            selectCategory === 0 ? "active" : ""
+          }`}
         />
         {this.state.categories.map((data, index) => {
           return (
@@ -76,7 +85,10 @@ class Categories extends Component {
               text={data.content}
               iconName={IconRange[index]}
               iconColor={ColorRange[random(0, 6)]}
-              className="list-group-item list-group-item-action"
+              onClick={() => this._selectCategory(data.id)}
+              className={`list-group-item list-group-item-action ${
+                selectCategory === data.id ? "active" : ""
+              }`}
             />
           );
         })}

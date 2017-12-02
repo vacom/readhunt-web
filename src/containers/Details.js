@@ -13,6 +13,8 @@ import { getCommentsbyArticle } from "../api/comments";
 //Utils
 import { _getUserId, _isLoggedIn } from "../utils/Utils";
 import * as moment from "moment";
+import Tesseract from 'tesseract.js'
+
 class Details extends Component {
   state = {
     loading: true,
@@ -25,6 +27,7 @@ class Details extends Component {
     msg: ""
   };
   componentDidMount() {
+    this.convertImageToText();
     const id = this.props.match.params.id;
     this._getArticle(id);
   }
@@ -44,7 +47,8 @@ class Details extends Component {
     this.setState({
       article,
       msg,
-      loading: false
+      loading: false,
+      error: false
     });
   };
   _getVotes = async articleId => {
@@ -89,6 +93,27 @@ class Details extends Component {
       msg
     });
   };
+  convertImageToText = () => {
+    const imageUrl = "https://favim.com/orig/201108/19/black-and-white-cool-simple-text-Favim.com-125982.jpg";
+    Tesseract.recognize(imageUrl)
+    .then(function(result){
+        console.log(result)
+    })
+    /*Tesseract.recognize(imageUrl)
+      .progress(function(status) {
+        console.log(status.progress);
+      })
+      .catch(function(err) {
+        console.error(err);
+      })
+      .then(function(result) {
+        console.log(result.text);
+      })
+      .finally(function(resultOrError) {
+        console.log(resultOrError);
+      });*/
+  };
+
   render() {
     if (this.state.loading) {
       return (
@@ -139,7 +164,7 @@ class Details extends Component {
             </Section>
             <h6 style={{ marginTop: 25 }}>Comentários</h6>
             <Section noTitle>
-              <CommentInput />
+              {_isLoggedIn() ? <CommentInput /> : ""}
               {this.state.commentsLoading ? (
                 <div className="text-center">
                   <Spinner size={30} />
@@ -188,13 +213,12 @@ class Details extends Component {
               </a>
             </Section>
             {_isLoggedIn() ? (
-              _getUserId() === article.user_id ? (
+              _getUserId() == article.user_id ? (
                 <Section noTitle>
                   <a
                     role="button"
                     className="btn btn-light btn-lg btn-block"
-                    href={article.link}
-                    target="_blank"
+                    href={`#/edit/${article.id}`}
                   >
                     <Icon name="fa-pencil" /> Editar
                   </a>
