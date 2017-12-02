@@ -1,5 +1,6 @@
 //Utils
 import { apiUrl } from "../utils/Constants";
+import { _token } from "../utils/Utils";
 /**
  * VOTES API ENDPOINTS
  */
@@ -25,4 +26,30 @@ const getVotesCountbyArticle = async articleId => {
   return data;
 };
 
-export { getVotesbyArticle, getVotebyId, getVotesCountbyArticle };
+//POSTS
+
+//Creates a new vote for the article
+const voteArticlebyId = async (voted, user_id, article_id) => {
+  const options = {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${_token()}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      voted,
+      user_id,
+      article_id
+    })
+  };
+  const res = await fetch(`${apiUrl}/vote`, options);
+  const data = await res.json();
+  return data;
+};
+
+export {
+  getVotesbyArticle,
+  getVotebyId,
+  getVotesCountbyArticle,
+  voteArticlebyId
+};

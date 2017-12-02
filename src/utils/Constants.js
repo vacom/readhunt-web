@@ -7,11 +7,20 @@ const oAuthRedirectUrl = `${serverUrl}/oauth/authorize?client_id=${
   clientId
 }&redirect_uri=${clientUrl}/callback&response_type=code&scope`;
 
+const ALERT_OPTIONS = {
+  offset: 14,
+  position: "bottom left",
+  theme: "light",
+  time: 3000,
+  transition: "fade"
+};
+
 export {
   apiUrl,
   clientId,
   clientSecret,
   serverUrl,
   clientUrl,
-  oAuthRedirectUrl
+  oAuthRedirectUrl,
+  ALERT_OPTIONS
 };

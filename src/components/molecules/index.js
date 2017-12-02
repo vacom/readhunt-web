@@ -5,6 +5,7 @@ import Card from "./Card";
 import Section from "./Section";
 import Post from "./Post";
 import Placeholder from "./Placeholder";
+import Confirmation from "./Confirmation";
 
 export {
   List,
@@ -13,4 +14,5 @@ export {
   Section,
   Post,
   Placeholder,
+  Confirmation
 };

@@ -5,7 +5,7 @@ import Colors from "../../utils/Colors";
 //Components
 //import Icon from "../atoms/Icon";
 
-const Post = (props) => {
+const Post = props => {
   return (
     <div className={`row ${props.className}`} onClick={props.onClick}>
       <div className="col-sm-12">
@@ -18,24 +18,25 @@ const Post = (props) => {
             />
             <div className="content float-left">
               <h5
-                className={`card-title ${props.onDetails
-                  ? ""
-                  : "text-truncate"}`}
+                className={`card-title ${
+                  props.onDetails ? "" : "text-truncate"
+                }`}
               >
                 {props.title}
               </h5>
               <p
-                className={`card-text ${props.onDetails
-                  ? ""
-                  : "text-truncate"}`}
+                className={`card-text ${
+                  props.onDetails ? "" : "text-truncate"
+                }`}
               >
                 {props.text}
               </p>
               <span className="badge badge-light">{props.category}</span>
             </div>
-            {props.onDetails ? (
-              ""
-            ) : (""/*
+
+            {props.onDetails
+              ? ""
+              : "" /*
               <div className="rd-tools text-right">
                 <button type="button" className="btn btn-sm btn-outline-dark">
                   <Icon
@@ -54,7 +55,7 @@ const Post = (props) => {
                   {props.comments}
                 </button>
               </div>
-            */)}
+            */}
           </div>
         </div>
       </div>

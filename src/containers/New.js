@@ -5,7 +5,9 @@ import { Section, Post } from "../components/molecules/index";
 import Spinner from "react-md-spinner";
 //API
 import { getCategories } from "../api/categories";
-import { getArticle, createArticle } from "../api/articles";
+import { getArticle, createArticle, updateArticle } from "../api/articles";
+//Utils
+import { _getUserId } from "../utils/Utils";
 
 class New extends Component {
   state = {
@@ -13,6 +15,7 @@ class New extends Component {
     tagline: "",
     thumbnail_url: "",
     category_id: 1,
+    article_id: 0,
     loading: true,
     error: false,
     categories: [],
@@ -25,6 +28,7 @@ class New extends Component {
     modeEdit: false
   };
   componentDidMount() {
+    console.log(this.props);
     this._getCategories();
     const isEdit = this.props.match.path.split("/");
     console.log(isEdit);
@@ -41,7 +45,13 @@ class New extends Component {
       this.setState({ error: true, loading: false, msg });
       return;
     }
-    this.setState({ categories, loading: false, msg, error: false });
+    this.setState({
+      categories,
+      loading: false,
+      msg,
+      error: false,
+      user_id: _getUserId()
+    });
   };
   _changeCategory = e => {
     var index = e.target.selectedIndex;
@@ -60,6 +70,7 @@ class New extends Component {
       this.setState({ error: true, loading: false, msg });
       return;
     }
+    console.log(article);
     const {
       title,
       tagline,
@@ -80,22 +91,37 @@ class New extends Component {
       user_id,
       category_text: category.content,
       category_id: category.id,
+      article_id: id,
       msg,
       loading: false,
       error: false
     });
   };
-  _storeArticle = () => {
-    createArticle();
-    /*const res = await createArticle();
+  _storeArticle = async () => {
+    const res = await createArticle(this.state);
     const { error, data, msg } = res;
     if (error) {
       this.setState({ error: true, msg: `${msg} - ${JSON.stringify(data)}` });
       return;
     }
-
-    console.log(res);*/
+    //Shows feedback and updates the DB
+    this.props.showMessage("success", msg, undefined, "fa-check");
+    this.props.history.push("/");
+    console.log(res);
   };
+  _updateArticle = async () => {
+    console.log("article_id = ", this.state.article_id);
+    const res = await updateArticle(this.state);
+    const { error, data, msg } = res;
+    if (error) {
+      this.setState({ error: true, msg: `${msg} - ${JSON.stringify(data)}` });
+      return;
+    }
+    //Shows feedback and updates the DB
+    this.props.showMessage("success", msg, undefined, "fa-check");
+    this.props.history.push("/");
+  };
+
   render() {
     if (this.state.loading) {
       return (
@@ -233,6 +259,7 @@ class New extends Component {
                   style={{ cursor: "pointer" }}
                   type="button"
                   className="btn btn-warning btn-lg btn-block"
+                  onClick={this._updateArticle}
                 >
                   Atualizar livro
                 </button>

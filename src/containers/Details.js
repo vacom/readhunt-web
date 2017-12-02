@@ -1,18 +1,24 @@
 import React, { Component } from "react";
 //Components
 import { Image, Icon } from "../components/atoms/index";
-import { Section, Post, Placeholder } from "../components/molecules/index";
+import {
+  Section,
+  Post,
+  Placeholder,
+  Confirmation
+} from "../components/molecules/index";
 import { CommentInput } from "../components/organisms/index";
 import Comment from "../components/molecules/Post";
 import Spinner from "react-md-spinner";
 //API
-import { getArticle } from "../api/articles";
-import { getVotesCountbyArticle } from "../api/votes";
+import { getArticle, deleteArticlebyId } from "../api/articles";
+import { getVotesCountbyArticle, voteArticlebyId } from "../api/votes";
 import { getCategory } from "../api/categories";
 import { getCommentsbyArticle } from "../api/comments";
 //Utils
 import { _getUserId, _isLoggedIn } from "../utils/Utils";
 import * as moment from "moment";
+import Colors from "../utils/Utils";
 
 class Details extends Component {
   state = {
@@ -23,9 +29,11 @@ class Details extends Component {
     category: "",
     comments: [],
     commentsLoading: true,
-    msg: ""
+    msg: "",
+    onConfirmation: false
   };
   componentDidMount() {
+    console.log(this.props);
     const id = this.props.match.params.id;
     this._getArticle(id);
   }
@@ -61,6 +69,23 @@ class Details extends Component {
       msg
     });
   };
+  _storeVote = async () => {
+    const { article } = this.state;
+    const res = await voteArticlebyId(true, _getUserId(), article.id);
+    const { error, data, msg } = res;
+    if (error) {
+      this.props.showMessage(
+        "error",
+        msg,
+        undefined,
+        "fa-exclamation-triangle"
+      );
+      return;
+    }
+    this._getVotes(article.id);
+    //Shows feedback and updates the DB
+    this.props.showMessage("success", msg, undefined, "fa-check");
+  };
   _getCategorybyId = async id => {
     const res = await getCategory(id);
     const { error, data: category, msg } = res;
@@ -91,6 +116,22 @@ class Details extends Component {
       msg
     });
   };
+  _deleteArticle = async () => {
+    const res = await deleteArticlebyId(this.state.article.id);
+    const { error, data, msg } = res;
+    if (error) {
+      this.setState({ error: true, msg: `${msg} - ${JSON.stringify(data)}` });
+      return;
+    }
+    //Shows feedback and updates the DB
+    this.props.showMessage("success", msg, undefined, "fa-check");
+    this.props.history.push("/");
+  };
+  _showConfirmation = () => {
+    this.setState(prevState => ({
+      onConfirmation: !prevState.onConfirmation
+    }));
+  };
   render() {
     if (this.state.loading) {
       return (
@@ -106,9 +147,18 @@ class Details extends Component {
         </div>
       );
     }
-    const { article, votes, category, comments } = this.state;
+    const { article, votes, category, comments, onConfirmation } = this.state;
     return (
       <div>
+        <Confirmation
+          title="Tem certeza?"
+          description="Este livro será removido, não pode recuperar depois."
+          show={onConfirmation}
+          onCancel={this._showConfirmation}
+          onConfirmation={this._deleteArticle}
+          onConfirmationText="Confirmar"
+          onConfirmationColor={Colors.green}
+        />
         <div className="row">
           <div className="col-md-12 col-sm-12">
             <Post
@@ -141,7 +191,16 @@ class Details extends Component {
             </Section>
             <h6 style={{ marginTop: 25 }}>Comentários</h6>
             <Section noTitle>
-              {_isLoggedIn() ? <CommentInput /> : ""}
+              {_isLoggedIn() ? (
+                <CommentInput
+                  user_id={_getUserId()}
+                  article_id={article.id}
+                  showMessage={this.props.showMessage}
+                  updateComments={() => this._getComments(article.id)}
+                />
+              ) : (
+                ""
+              )}
               {this.state.commentsLoading ? (
                 <div className="text-center">
                   <Spinner size={30} />
@@ -170,6 +229,7 @@ class Details extends Component {
               <button
                 style={{ cursor: "pointer" }}
                 type="button"
+                onClick={this._storeVote}
                 className="btn btn-primary btn-lg btn-block"
               >
                 <Icon name="fa-thumbs-up" color="#FFF" /> Votar
@@ -190,7 +250,7 @@ class Details extends Component {
               </a>
             </Section>
             {_isLoggedIn() ? (
-              _getUserId() == article.user_id ? (
+              Number(_getUserId()) === Number(article.user_id) ? (
                 <Section noTitle>
                   <a
                     role="button"
@@ -204,6 +264,7 @@ class Details extends Component {
                     style={{ cursor: "pointer" }}
                     type="button"
                     className="btn btn-danger btn-lg btn-block"
+                    onClick={this._showConfirmation}
                   >
                     <Icon name="fa-trash-o" color="#FFF" /> Eliminar
                   </button>

@@ -30,42 +30,91 @@ const getArticle = async id => {
 //POSTS
 
 //Creates a new article in the DB
-const createArticle = async () => {
-  /*const options = {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${_token}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      title: "hey",
-    })
-  };
-  const res = await fetch(`${apiUrl}/article`, options);
-  console.log(res);
-  const data = await res.json();
-  return data;*/
-
+const createArticle = async ({
+  title,
+  tagline,
+  thumbnail_url,
+  link,
+  description,
+  cover_url,
+  user_id,
+  category_id
+}) => {
   const options = {
     method: "POST",
     headers: {
-      "Authorization": `Bearer ${_token}`,
+      Authorization: `Bearer ${_token()}`,
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      title: "hey"
-    }),
+      title,
+      tagline,
+      thumbnail_url,
+      link,
+      description,
+      cover_url,
+      user_id,
+      category_id
+    })
   };
-  fetch(`${apiUrl}/article`, options)
-    .then(res => {
-      return res.json();
-    })
-    .then(data => {
-      console.log(data);
-    })
-    .catch(e => {
-      console.error(e);
-    });
+  const res = await fetch(`${apiUrl}/article`, options);
+  const data = await res.json();
+  return data;
 };
 
-export { getArticles, getArticle, getArticlesByCategory, createArticle };
+//Update the article by id
+const updateArticle = async ({
+  title,
+  tagline,
+  thumbnail_url,
+  link,
+  description,
+  cover_url,
+  user_id,
+  category_id,
+  article_id
+}) => {
+  const options = {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${_token()}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      title,
+      tagline,
+      thumbnail_url,
+      link,
+      description,
+      cover_url,
+      user_id,
+      category_id
+    })
+  };
+  const res = await fetch(`${apiUrl}/article/${article_id}`, options);
+  const data = await res.json();
+  return data;
+};
+
+//Deletes the Article by id
+const deleteArticlebyId = async article_id => {
+  const options = {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${_token()}`,
+      "Content-Type": "application/json"
+    }
+  };
+  const res = await fetch(`${apiUrl}/article/${article_id}`, options);
+  const data = await res.json();
+  return data;
+};
+
+export {
+  getArticles,
+  getArticle,
+  getArticlesByCategory,
+  createArticle,
+  updateArticle,
+  deleteArticlebyId
+};

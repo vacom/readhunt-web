@@ -5,6 +5,8 @@ import Colors from "../../utils/Colors";
 //Components
 import { Icon } from "../atoms/index";
 import Spinner from "react-md-spinner";
+//API
+import { storeCommentByArticleId } from "../../api/comments";
 //Utils
 let Tesseract = window.Tesseract;
 class CommentInput extends PureComponent {
@@ -31,6 +33,34 @@ class CommentInput extends PureComponent {
       .finally(resultOrError => {
         console.log(resultOrError);
       });
+  };
+  _storeComment = async () => {
+    const { user_id, article_id } = this.props;
+    const { commentText } = this.state;
+    if (commentText) {
+      const res = await storeCommentByArticleId(
+        commentText,
+        user_id,
+        article_id
+      );
+      const { error, data, msg } = res;
+      if (error) {
+        this.setState({ error: true, msg: `${msg} - ${JSON.stringify(data)}` });
+        return;
+      }
+      console.log(res);
+      //Shows feedback and updates the DB
+      this.props.showMessage("success", msg, undefined, "fa-check");
+      this.props.updateComments();
+      this.setState({
+        commentText: ""
+      });
+    } else {
+      this.setState({
+        error: true,
+        msg: "Comentários invisíveis não são permitidos!"
+      });
+    }
   };
   render() {
     return (
@@ -75,6 +105,7 @@ class CommentInput extends PureComponent {
               <button
                 type="button"
                 className="btn btn-primary float-right"
+                onClick={this._storeComment}
                 style={{ cursor: "pointer" }}
               >
                 Comentar

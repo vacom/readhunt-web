@@ -6,10 +6,34 @@ import { Avatar, Link, Icon } from "../atoms/index";
 import styled from "styled-components";
 import Colors from "../../utils/Colors";
 //utils
-import { _refreshPage, _isLoggedIn } from "../../utils/Utils";
+import { _refreshPage, _isLoggedIn, _getUserId } from "../../utils/Utils";
+//API
+import { getProfilebyId } from "../../api/profiles";
 class Navbar extends PureComponent {
   state = {
-    searchQuery: ""
+    searchQuery: "",
+    loading: true,
+    error: false,
+    avatar_url: "",
+    msg: ""
+  };
+  componentDidMount() {
+    this._getProfileAvatar();
+  }
+  _getProfileAvatar = async () => {
+    const id = _getUserId();
+    const res = await getProfilebyId(id);
+    const { error, data: user, msg } = res;
+    if (error) {
+      this.setState({ error: true, loading: false, msg });
+      return;
+    }
+    this.setState({
+      avatar_url: user[0].avatar_url,
+      msg,
+      loading: false,
+      error: false
+    });
   };
   _goToSearch = e => {
     if (e.key === "Enter") {
@@ -84,7 +108,11 @@ class Navbar extends PureComponent {
                   </li>,
                   <li className="nav-item" key="profileAvatar">
                     <Link className="nav-link" href="#/profile/1">
-                      <Avatar src="https://goo.gl/qd6RoG" size={30} />
+                      <Avatar
+                        src={`${this.state.avatar_url ||
+                          "http://via.placeholder.com/150x150"}`}
+                        size={30}
+                      />
                     </Link>
                   </li>
                 ]

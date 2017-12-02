@@ -32,6 +32,13 @@ class Profile extends PureComponent {
       error: false
     });
   };
+  _logout = () => {
+    window.localStorage.removeItem("readhuntToken");
+    window.localStorage.removeItem("readhuntUserId");
+    setTimeout(() => {
+      this.props.history.push("/signin");
+    }, 250);
+  };
   render() {
     if (this.state.loading) {
       return (
@@ -75,18 +82,18 @@ class Profile extends PureComponent {
         <div className="row">
           <div className="col-md-12">
             {_isLoggedIn() ? (
-              _getUserId() == profile.user_id ? (
+              Number(_getUserId()) === Number(profile.user_id) ? (
                 <div className="alert alert-light" role="alert">
-                  <a href="#/signin" className="alert-link">
+                  <a href={`#/profile/edit/${_getUserId()}`} className="alert-link">
                     Editar informações
                   </a>{" "}
                   |{" "}
                   <a
-                    href="#/signin"
+                    onClick={this._logout}
                     className="alert-link"
-                    style={{ color: "#ff5467" }}
+                    style={{ color: "#ff5467", cursor: "pointer" }}
                   >
-                    Eliminar
+                    Sair de sessão
                   </a>
                 </div>
               ) : (
