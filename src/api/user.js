@@ -1,4 +1,3 @@
-//import axios from "axios";
 //Utils
 import {
   apiUrl,
@@ -11,12 +10,6 @@ import { _token } from "../utils/Utils";
 /**
  * USER API ENDPOINTS
  */
-
-/*axios.defaults.baseURL = "http://127.0.0.1:8000";
-
-if (_token()) {
-  axios.defaults.headers.common["Authorization"] = "Bearer " + _token();
-}*/
 
 //GETS
 

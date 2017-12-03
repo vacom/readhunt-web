@@ -49,7 +49,6 @@ class Details extends Component {
   _getArticle = async id => {
     const res = await getArticle(id);
     const { error, data: article, msg } = res;
-    console.log(res);
     if (error) {
       this.setState({ error: true, loading: false, msg });
       return;

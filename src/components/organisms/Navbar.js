@@ -52,7 +52,11 @@ class Navbar extends PureComponent {
         }`}
       >
         <div className="container">
-          <a className="navbar-brand" href="#/">
+          <a
+            style={{ cursor: "pointer" }}
+            className="navbar-brand"
+            onClick={() => this.props.history.push(`/`)}
+          >
             Readhunt
           </a>
           <button
@@ -85,7 +89,10 @@ class Navbar extends PureComponent {
             </ul>
             <ul className="navbar-nav">
               <li className="nav-item">
-                <Link className="nav-link" href="#/">
+                <Link
+                  className="nav-link"
+                  onClick={() => this.props.history.push(`/`)}
+                >
                   <button
                     className="btn btn-sm align-middle btn-outline-secondary rd-add"
                     type="button"
@@ -97,7 +104,10 @@ class Navbar extends PureComponent {
               {_isLoggedIn() ? (
                 [
                   <li className="nav-item" key="addbook">
-                    <Link className="nav-link" href="#/new">
+                    <Link
+                      className="nav-link"
+                      onClick={() => this.props.history.push(`/new`)}
+                    >
                       <button
                         className="btn btn-sm align-middle btn-outline-secondary rd-add"
                         type="button"
@@ -107,7 +117,12 @@ class Navbar extends PureComponent {
                     </Link>
                   </li>,
                   <li className="nav-item" key="profileAvatar">
-                    <Link className="nav-link" href="#/profile/1">
+                    <Link
+                      className="nav-link"
+                      onClick={() =>
+                        this.props.history.push(`/profile/${_getUserId()}`)
+                      }
+                    >
                       <Avatar
                         src={`${this.state.avatar_url ||
                           "http://via.placeholder.com/150x150"}`}
@@ -120,8 +135,8 @@ class Navbar extends PureComponent {
                 <li className="nav-item">
                   <Link
                     className="nav-link"
-                    href="#/signin"
-                    style={{ marginTop: "4px" }}
+                    onClick={() => this.props.history.push(`/signin`)}
+                    style={{ marginTop: "4px", cursor: "pointer", color: "#297DF6" }}
                   >
                     Iniciar Sessão?
                   </Link>

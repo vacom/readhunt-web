@@ -85,7 +85,10 @@ class Profile extends PureComponent {
               Number(_getUserId()) === Number(profile.user_id) ? (
                 <div className="alert alert-light" role="alert">
                   <a
-                    href={`#/profile/edit/${_getUserId()}`}
+                    style={{ cursor: "pointer" }}
+                    onClick={() =>
+                      this.props.history.push(`/profile/edit/${_getUserId()}`)
+                    }
                     className="alert-link"
                   >
                     Editar informações

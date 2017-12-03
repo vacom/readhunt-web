@@ -20,14 +20,12 @@ class CommentInput extends PureComponent {
     const imageUrl = e.target.files[0];
     Tesseract.recognize(imageUrl)
       .progress(status => {
-        console.log(status.progress);
         this.setState({ loading: true });
       })
       .catch(err => {
         console.error(err);
       })
       .then(result => {
-        console.log(result.text);
         this.setState({ commentText: result.text, loading: false });
       })
       .finally(resultOrError => {
@@ -48,7 +46,6 @@ class CommentInput extends PureComponent {
         this.setState({ error: true, msg: `${msg} - ${JSON.stringify(data)}` });
         return;
       }
-      console.log(res);
       //Shows feedback and updates the DB
       this.props.showMessage("success", msg, undefined, "fa-check");
       this.props.updateComments();

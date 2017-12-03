@@ -56,7 +56,6 @@ const createProfileByUserId = async (
   const options = {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${_token()}`,
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
