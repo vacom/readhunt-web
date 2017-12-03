@@ -113,7 +113,7 @@ class New extends Component {
     }
     //Shows feedback and updates the DB
     this.props.showMessage("success", msg, undefined, "fa-check");
-    this.props.history.push("/");
+    this.props.history.goBack();
   };
 
   render() {

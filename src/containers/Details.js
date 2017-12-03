@@ -336,7 +336,10 @@ class Details extends Component {
                   <a
                     role="button"
                     className="btn btn-light btn-lg btn-block"
-                    href={`#/edit/${article.id}`}
+                    style={{cursor: "pointer"}}
+                    onClick={() =>
+                      this.props.history.push(`/edit/${article.id}`)
+                    }
                   >
                     <Icon name="fa-pencil" /> Editar
                   </a>

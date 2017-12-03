@@ -42,6 +42,9 @@ class Callback extends PureComponent {
         msg: "Erro ao recolher o utilizador autenticado, tente novamente",
         loading: false
       });
+      setTimeout(() => {
+        this.props.history.push("/signin");
+      }, 500);
       return;
     }
     localStorage.setItem("readhuntUserId", res.data.id);

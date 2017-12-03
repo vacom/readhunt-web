@@ -5,6 +5,8 @@ import Spinner from "react-md-spinner";
 //API
 import { getArticles, getArticlesByCategory } from "../api/articles";
 import { getCategory } from "../api/categories";
+//Utils
+import * as moment from "moment";
 class Articles extends Component {
   state = {
     loading: true,
@@ -64,6 +66,7 @@ class Articles extends Component {
       );
     }
     const { articles, pageCount, showArticles } = this.state;
+    console.log(articles);
     return (
       <div>
         {this.state.loading ? (
@@ -82,7 +85,10 @@ class Articles extends Component {
                   imageSrc={
                     data.thumbnail_url || "http://via.placeholder.com/150x150"
                   }
-                  category={data.category || "Sem categoria"}
+                  category={
+                    `${data.category} - ${moment(data.created_at).fromNow()}` ||
+                    "Sem categoria"
+                  }
                 />
               );
             }

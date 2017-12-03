@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 //Components
 import { Link } from "../components/atoms/index";
 import { List, Card, Placeholder } from "../components/molecules/index";
@@ -50,7 +51,12 @@ class Suggestions extends Component {
               subtitle={`Encontrado por ${data.name}`}
               text={data.tagline}
             >
-              <Link href={`#/post/${data.id}`}>Ver livro</Link>
+              <Link
+                onClick={() => this.props.history.push(`/post/${data.id}`)}
+                style={{ color: "#297DF6" }}
+              >
+                Ver livro
+              </Link>
             </Card>
           );
         })}
@@ -59,4 +65,4 @@ class Suggestions extends Component {
   }
 }
 
-export default Suggestions;
+export default withRouter(Suggestions);
