@@ -66,7 +66,6 @@ class Articles extends Component {
       );
     }
     const { articles, pageCount, showArticles } = this.state;
-    console.log(articles);
     return (
       <div>
         {this.state.loading ? (

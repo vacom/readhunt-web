@@ -13,6 +13,7 @@ class CommentInput extends PureComponent {
   state = {
     commentText: "",
     loading: false,
+    loadingVoice: false,
     error: false,
     msg: ""
   };
@@ -59,6 +60,38 @@ class CommentInput extends PureComponent {
       });
     }
   };
+  _convertVoiceToText = () => {
+    try {
+      var SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+      var recognition = new SpeechRecognition();
+
+      recognition.start();
+
+      recognition.onstart = () => {
+        this.setState({ loadingVoice: true });
+      };
+
+      recognition.onspeechend = () => {
+        this.setState({ loadingVoice: false });
+      };
+
+      recognition.onerror = event => {
+        if (event.error === "no-speech") {
+          this.setState({ loadingVoice: false });
+        }
+      };
+
+      recognition.onresult = event => {
+        var current = event.resultIndex;
+        var transcript = event.results[current][0].transcript;
+        const commentText = this.state.commentText + " " + transcript;
+        this.setState({ commentText });
+      };
+    } catch (e) {
+      console.error(e);
+    }
+  };
   render() {
     return (
       <div className={`card ${this.props.className}`}>
@@ -88,7 +121,7 @@ class CommentInput extends PureComponent {
                 }}
               />
               {this.state.loading ? (
-                <Spinner />
+                <Spinner className="float-left"/>
               ) : (
                 <button
                   type="button"
@@ -97,6 +130,18 @@ class CommentInput extends PureComponent {
                   style={{ cursor: "pointer" }}
                 >
                   <Icon name="fa-camera" />
+                </button>
+              )}
+              {this.state.loadingVoice ? (
+                <Spinner />
+              ) : (
+                <button
+                  type="button"
+                  className="btn btn-light float-left"
+                  onClick={this._convertVoiceToText}
+                  style={{ cursor: "pointer" }}
+                >
+                  <Icon name="fa-microphone" />
                 </button>
               )}
               <button
